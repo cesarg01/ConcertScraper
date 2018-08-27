@@ -51,8 +51,21 @@ link = str(link_found[3])
 # Search the link between quotation marks.
 result = re.findall('"(.*?)"', link)
 
-# Convert the list to a String and remove the unnecessary characters that carried over.
+# Convert the list to a String and remove the unnecessary characters that carried over. (ex. [' '])
 new_link = str(result)
 new_link = new_link[2:-2]
+#print(new_link)
+
+artist_site = songkick_site[:24] + new_link
+print(artist_site)
+
+# Get request from the artist site and parse it
+artist_site_object = requests.get(artist_site)
+artist_site_text = artist_site_object.text
+artist_site_soup = BeautifulSoup(artist_site_text, 'html.parser')
+
+# Check if the artist is on tour so we can get more info
+on_tour = artist_site_soup.find('li', class_ = 'ontour').get_text()
+print(on_tour)
     
 
