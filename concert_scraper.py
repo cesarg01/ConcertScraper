@@ -15,6 +15,24 @@ def checkSpace(artist_name):
     else:
         return artist_name
 
+# Get the tour dates of the artists.
+def get_tour_dates(artist_site_soup):
+    #tour_dates = artist_site_soup.find('div', class_ = 'event-row').get_text()
+    tour_dates = []
+    for dates in artist_site_soup.find_all('div', class_ = 'event-row'):
+        tour_dates.append(dates)
+    #tour_dates = tour_dates.split()
+    tour_dates[0] = tour_dates[0].get_text()
+    print(tour_dates[0].split())
+    tour_dates[0] = tour_dates[0].split()
+
+    for i in tour_dates[0]:
+        print(str(i))
+        if(str(i) == 'US'):
+            print('Exit here!')
+        else:
+            print('Add to list!')
+
 
 
 ################################################## MAIN PROGRAM #########################################################
@@ -67,5 +85,9 @@ artist_site_soup = BeautifulSoup(artist_site_text, 'html.parser')
 # Check if the artist is on tour so we can get more info
 on_tour = artist_site_soup.find('li', class_ = 'ontour').get_text()
 print(on_tour)
-    
 
+if(on_tour == 'yes'):
+    get_tour_dates(artist_site_soup)
+else:
+    print('{} is not on tour.'.format(artist_name))
+    exit
