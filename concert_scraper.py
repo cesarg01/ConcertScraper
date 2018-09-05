@@ -16,22 +16,30 @@ def checkSpace(artist_name):
         return artist_name
 
 # Get the tour dates of the artists.
-def get_tour_dates(artist_site_soup):
+def get_tour_dates(artist_site_soup, new_dates):
     #tour_dates = artist_site_soup.find('div', class_ = 'event-row').get_text()
     tour_dates = []
     for dates in artist_site_soup.find_all('div', class_ = 'event-row'):
         tour_dates.append(dates)
     #tour_dates = tour_dates.split()
-    tour_dates[0] = tour_dates[0].get_text()
-    print(tour_dates[0].split())
-    tour_dates[0] = tour_dates[0].split()
+    if(len(tour_dates) == 1):
+        print('{} concert near you. \n'.format(len(tour_dates)))
+    else:
+        print('{} concerts near you. \n'.format(len(tour_dates)))
 
-    for i in tour_dates[0]:
-        print(str(i))
-        if(str(i) == 'US'):
-            print('Exit here!')
-        else:
-            print('Add to list!')
+
+    for i in range(0, len(tour_dates)):
+        tour_dates[i] = tour_dates[i].get_text()
+        #print(tour_dates[i].split())
+        # Convert each tour date into a list
+        tour_dates[i] = tour_dates[i].split()
+        # Convert list to string for each tour date list
+        date = " ".join(tour_dates[i])
+        # Delete all the unnecessary info after the state
+        head, sep, tail= date.partition(', US')
+        new_dates.append(head)
+        #print(head + '\n')
+    return new_dates
 
 
 
@@ -86,8 +94,11 @@ artist_site_soup = BeautifulSoup(artist_site_text, 'html.parser')
 on_tour = artist_site_soup.find('li', class_ = 'ontour').get_text()
 print(on_tour)
 
-if(on_tour == 'yes'):
-    get_tour_dates(artist_site_soup)
+if('yes' in on_tour):
+    dates = []
+    get_tour_dates(artist_site_soup, dates)
+    for date in dates:
+        print(date)
 else:
     print('{} is not on tour.'.format(artist_name))
     exit
