@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import re
+import pyowm
 
 # Check to see if the name provided by the user has a space so we can modify the string to add '+' instead of the space 
 # character since that is what is done in the URL.
@@ -99,6 +100,26 @@ if('yes' in on_tour):
     get_tour_dates(artist_site_soup, dates)
     for date in dates:
         print(date)
+
+    # Get the city and state and check the tempature and the current condition
+    location = dates[0].split(', ')
+    print(location)
+    
+    city = location[len(location)-2]
+    state = location[len(location)-1]
+    place = city + ', ' + state + ', USA'
+    print(place)
+    
+    # API key for OWM
+    owm = pyowm.OWM('21b71550850fc524c2e46097ba41d774')
+    observation = owm.weather_at_coords(37.3382082,-121.88632860000001)
+    w = observation.get_weather()
+    print(w)
+    
+    temperature = w.get_temperature('fahrenheit')['temp']
+    print(temperature)
+    print(w.get_detailed_status())
+    
 else:
     print('{} is not on tour.'.format(artist_name))
     exit
