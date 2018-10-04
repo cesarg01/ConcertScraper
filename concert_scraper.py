@@ -2,6 +2,8 @@ from bs4 import BeautifulSoup
 import requests
 import re
 import pyowm
+import googlemaps
+from datetime import datetime
 
 # Check to see if the name provided by the user has a space so we can modify the string to add '+' instead of the space 
 # character since that is what is done in the URL.
@@ -37,6 +39,7 @@ def get_tour_dates(artist_site_soup, new_dates):
         # Convert list to string for each tour date list
         date = " ".join(tour_dates[i])
         # Delete all the unnecessary info after the state
+        #print(date)
         head, sep, tail= date.partition(', US')
         new_dates.append(head)
         #print(head + '\n')
@@ -79,8 +82,9 @@ link = str(link_found[3])
 result = re.findall('"(.*?)"', link)
 
 # Convert the list to a String and remove the unnecessary characters that carried over. (ex. [' '])
-new_link = str(result)
-new_link = new_link[2:-2]
+new_link = ''.join(result) #str(result)
+print(new_link)
+#new_link = new_link[2:-2]
 #print(new_link)
 
 artist_site = songkick_site[:24] + new_link
@@ -100,26 +104,34 @@ if('yes' in on_tour):
     get_tour_dates(artist_site_soup, dates)
     for date in dates:
         print(date)
+        if(len(dates) == 0):
+            exit
+        else:
+            # Get the city and state and check the tempature and the current condition
+            location = dates[0].split(', ')
+            print(location)
+        
+            city = location[len(location)-2]
+            state = location[len(location)-1]
+            place = city + ', ' + state + ', USA'
+            print(place)
 
-    # Get the city and state and check the tempature and the current condition
-    location = dates[0].split(', ')
-    print(location)
-    
-    city = location[len(location)-2]
-    state = location[len(location)-1]
-    place = city + ', ' + state + ', USA'
-    print(place)
-    
-    # API key for OWM
-    owm = pyowm.OWM('21b71550850fc524c2e46097ba41d774')
-    observation = owm.weather_at_coords(37.3382082,-121.88632860000001)
-    w = observation.get_weather()
-    print(w)
-    
-    temperature = w.get_temperature('fahrenheit')['temp']
-    print(temperature)
-    print(w.get_detailed_status())
-    
-else:
-    print('{} is not on tour.'.format(artist_name))
-    exit
+            gmaps = googlemaps.Client(key='AIzaSyBeDHc2IX4OFFAUnwMuNG93fJbd52_K274')
+            geocode_result = gmaps.geocode(place)
+            lat = geocode_result[0]["geometry"]["location"]["lat"]
+            lon = geocode_result[0]["geometry"]["location"]["lng"]
+            #test - print results
+            #print (lat,lon)
+            # API key for OWM
+            owm = pyowm.OWM('21b71550850fc524c2e46097ba41d774')
+            observation = owm.weather_at_coords(lat,lon)
+            w = observation.get_weather()
+            #print(w)
+            
+            temperature = w.get_temperature('fahrenheit')['temp']
+            print(temperature)
+            print(w.get_detailed_status())
+        
+    else:
+        print('{} is not on tour.'.format(artist_name))
+        exit
