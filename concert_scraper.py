@@ -45,6 +45,7 @@ def get_tour_dates(artist_site_soup, new_dates):
         #print(head + '\n')
     return new_dates
 
+# Get the geolocation of the place where the concert is taking place and return the temperature
 def get_loc_temp(place):
     gmaps = googlemaps.Client(key='AIzaSyBeDHc2IX4OFFAUnwMuNG93fJbd52_K274')
     geocode_result = gmaps.geocode(place)
@@ -159,16 +160,16 @@ if('yes' in on_tour):
             print(date)
 
         # Get the city and state and check the tempature and the current condition
-        location = dates[0].split(', ')
-        #print(location)
+            location = date.split(', ')
+            print(location)
         
-        city = location[len(location)-2]
-        state = location[len(location)-1]
-        place = city + ', ' + state + ', USA'
-        print(place)
+            city = location[len(location)-2]
+            state = location[len(location)-1]
+            place = city + ', ' + state + ', USA'
+            print(place)
 
-        temp = get_loc_temp(place)
-        print(temp)
+            temp = get_loc_temp(place)
+            print(temp)
     
 else:
     print('{} is not on tour.'.format(artist_name))
