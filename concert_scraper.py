@@ -46,7 +46,7 @@ def get_tour_dates(artist_site_soup, new_dates):
     return new_dates
 
 # Get the geolocation of the place where the concert is taking place and return the temperature
-def get_loc_temp(place):
+def get_loc_temp(place, time):
     gmaps = googlemaps.Client(key='AIzaSyBeDHc2IX4OFFAUnwMuNG93fJbd52_K274')
     geocode_result = gmaps.geocode(place)
     lat = geocode_result[0]["geometry"]["location"]["lat"]
@@ -60,15 +60,35 @@ def get_loc_temp(place):
     #print(w)
     
     temperature = w.get_temperature('fahrenheit')['temp']
-    print(temperature)
+    #print(temperature)
     print(w.get_detailed_status())
     fc = owm.daily_forecast(place, limit = 1)
     f = fc.get_forecast()
-    print(fc.will_have_rain())
-    print(fc.will_have_snow())
-    print(fc.will_have_fog())
+    #print(f)
+    rain = fc.will_have_rain()
+    snow = fc.will_have_snow()
+    fog = fc.will_have_fog()
+
+    info = [temperature,  rain, snow, fog]
     
-    return temperature
+    return info
+
+def month_to_num(month):
+    return {
+        'January': 1,
+        'February': 2,
+        'March': 3,
+        'April': 4,
+        'May': 5,
+        'June': 6,
+        'July': 7,
+        'August': 8,
+        'September': 9,
+        'October': 10,
+        'November': 11,
+        'December': 12
+    }[month]
+
 
         
 ################################################## MAIN PROGRAM #########################################################
@@ -159,17 +179,31 @@ if('yes' in on_tour):
         for date in dates:
             print(date)
 
-        # Get the city and state and check the tempature and the current condition
+            # Get the city and state and check the tempature and the current condition
             location = date.split(', ')
-            print(location)
+            #print(location)
+            date_info = location[0].split(' ')
+            month = month_to_num(date_info[2])
+            day = date_info[1]
+            year = date_info[3]
+            time = [year, month, day]
+            #print(month)
         
             city = location[len(location)-2]
             state = location[len(location)-1]
             place = city + ', ' + state + ', USA'
-            print(place)
+            #print(place)
 
-            temp = get_loc_temp(place)
-            print(temp)
+            temp = get_loc_temp(place, time)
+            print('The current temperature is {}'.format(temp[0]))
+            if(temp[1] == True):
+                print('Rain today.')
+            if(temp[2] == True):
+                print('Snow today.')
+            if(temp[3] == True):
+                print('Fog today.')
+            
+            print('For weather during the concert please check the day of the concert.')
     
 else:
     print('{} is not on tour.'.format(artist_name))
