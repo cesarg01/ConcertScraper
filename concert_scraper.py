@@ -177,22 +177,23 @@ if('yes' in on_tour):
             exit()
     else:
         for date in dates:
-            print(date)
+            #print(date)
 
             # Get the city and state and check the tempature and the current condition
             location = date.split(', ')
-            #print(location)
+            print(location)
             date_info = location[0].split(' ')
             month = month_to_num(date_info[2])
             day = date_info[1]
             year = date_info[3]
             time = [year, month, day]
-            #print(month)
+            print(date_info[0])
+            print(time)
         
             city = location[len(location)-2]
             state = location[len(location)-1]
             place = city + ', ' + state + ', USA'
-            #print(place)
+            print(place)
 
             temp = get_loc_temp(place, time)
             print('The current temperature is {}'.format(temp[0]))
