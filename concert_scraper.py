@@ -187,7 +187,8 @@ if('yes' in on_tour):
             day = date_info[1]
             year = date_info[3]
             time = [year, month, day]
-            print(date_info[0])
+            print('Venue: ' , ' '.join(date_info[4:len(date_info)]))
+            print(date_info)
             print(time)
         
             city = location[len(location)-2]
