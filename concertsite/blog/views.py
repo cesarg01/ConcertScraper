@@ -24,5 +24,5 @@ def index_page(request):
         
         text = get_request_text(context['artist_site'])
         tour = on_tour(text)
-        context['tour'] = tour
+        context['tour'] = tour.title()
     return render(request, 'blog/index.html', context)

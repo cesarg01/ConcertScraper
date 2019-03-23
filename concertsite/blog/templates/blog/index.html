@@ -1,13 +1,13 @@
 {% extends 'blog/layout.html' %}
-
 {% block content%}
 
+<!--
 <div class="row">
     <form class="col s12" method="POST">
       {% csrf_token %}
       <div class="row">
         <div class="input-field col s6">
-          <i class="material-icons prefix">account_circle</i>
+          <i class="material-icons prefix">account_circle</i> 
           <input id="icon_prefix" type="text" class="validate" name="artist">
           <label class="active" for="icon_prefix">Artist Name</label>
           <input type="submit" value="Search">
@@ -15,6 +15,8 @@
       </div>
     </form>
 </div>
+-->
+
 
 <h1>{{ artist_name }}</h1>
 <p>
@@ -22,8 +24,7 @@
 </p>
 <ul>
   <li>Songkick URL: {{ artist_site }}</li>
-  <li>On Tour: {{ tour }}</li>
+  <li>{{ tour }}</li>
 </ul>
-
 
 {% endblock %}
