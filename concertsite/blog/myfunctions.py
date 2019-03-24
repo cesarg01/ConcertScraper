@@ -5,6 +5,22 @@ import re
 
 # Create your views here.
 
+def month_to_num(month):
+    return {
+        'January': 1,
+        'February': 2,
+        'March': 3,
+        'April': 4,
+        'May': 5,
+        'June': 6,
+        'July': 7,
+        'August': 8,
+        'September': 9,
+        'October': 10,
+        'November': 11,
+        'December': 12
+    }[month]
+
 def get_url(artist):
     songkick_site = 'https://www.songkick.com/search?utf8=✓&type=initial&query='
     songkick_site = songkick_site + artist
@@ -65,3 +81,56 @@ def on_tour(artist_site_soup):
             #print('Site has no information for {}'.format(artist_name))
             on_tour = 'Site has no information.'
     return on_tour
+    
+    # Get the tour dates of the artists.
+def get_tour_dates(artist_site_soup, new_dates):
+    #tour_dates = artist_site_soup.find('div', class_ = 'event-row').get_text()
+    tour_dates = []
+    for dates in artist_site_soup.find_all('div', class_ = 'event-row'):
+        tour_dates.append(dates)
+    #tour_dates = tour_dates.split()
+    if(len(tour_dates) == 1):
+        print('{} concert near you. \n'.format(len(tour_dates)))
+    else:
+        print('{} concerts near you. \n'.format(len(tour_dates)))
+
+
+    for i in range(0, len(tour_dates)):
+        tour_dates[i] = tour_dates[i].get_text()
+        #print(tour_dates[i].split())
+        # Convert each tour date into a list
+        tour_dates[i] = tour_dates[i].split()
+        # Convert list to string for each tour date list
+        date = " ".join(tour_dates[i])
+        # Delete all the unnecessary info after the state
+        #print(date)
+        head, sep, tail= date.partition(', US')
+        new_dates.append(head)
+        #print(head + '\n')
+    return new_dates
+
+def get_dates(on_tour, dates, artist_site_soup):
+    if('yes' in on_tour):
+        dates = get_tour_dates(artist_site_soup, dates)
+        if(len(dates) == 0):
+                return 'No concerts near you.'
+        else:
+            venue = []
+            for date in dates:
+                # Get the city and state and check the tempature and the current condition
+                location = date.split(', ')
+                print(location)
+                date_info = location[0].split(' ')
+                month = month_to_num(date_info[2])
+                day = date_info[1]
+                year = date_info[3]
+                time = [year, month, day]
+                print('Venue: ' , ' '.join(date_info[4:len(date_info)]))
+                venue.append(' '.join(date_info[4:len(date_info)]))
+                print(date_info)
+                print(time)
+                city = location[len(location)-2]
+                state = location[len(location)-1]
+                place = city + ', ' + state + ', USA'
+                print(place)
+    return venue

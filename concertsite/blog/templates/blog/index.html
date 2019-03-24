@@ -1,7 +1,23 @@
 {% extends 'blog/layout.html' %}
-{% block content%}
 
 <!--
+<div class="col-md-10 col-lg-8 col-xl-7 mx-auto" method="POST">
+    <br>
+    {% csrf_token %}
+    <form>
+      <div class="form-row">
+        <div class="col-12 col-md-9 mb-2 mb-md-0">
+          <input type="text" class="form-control form-control-lg rounded-pill" name="artist" placeholder="Enter artist name...">
+        </div>
+        <div class="col-12 col-md-3">
+          <input type="submit" value="Search" class="btn btn-block btn-lg btn-primary rounded-pill">
+        </div>
+      </div>
+    </form>
+  </div>
+
+
+
 <div class="row">
     <form class="col s12" method="POST">
       {% csrf_token %}
@@ -16,8 +32,23 @@
     </form>
 </div>
 -->
+{% block search%}
+<div class="form-row">
+    <form class="col-md-10 col-lg-8 col-xl-7 mx-auto" method="POST">
+      {% csrf_token %}
+      <div class="form-row">
+          <div class="col-12 col-md-9 mb-2 mb-md-0">
+            <input type="text" class="form-control form-control-lg rounded-pill" name="artist" placeholder="Enter artist name...">
+          </div>
+          <div class="col-12 col-md-3">
+            <input type="submit" value="Search" class="btn btn-block btn-lg btn-primary rounded-pill">
+          </div>
+      </div>
+    </form>
+</div>
+{% endblock search%}
 
-
+{% block content%}
 <h1>{{ artist_name }}</h1>
 <p>
   Artist information
@@ -25,6 +56,7 @@
 <ul>
   <li>Songkick URL: {{ artist_site }}</li>
   <li>{{ tour }}</li>
+  <li>Locations: {{ venue }}</li>
 </ul>
 
-{% endblock %}
+{% endblock content%}
