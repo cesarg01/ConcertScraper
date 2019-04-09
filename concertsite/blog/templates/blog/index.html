@@ -49,14 +49,31 @@
 {% endblock search%}
 
 {% block content%}
+
+
 <h1>{{ artist_name }}</h1>
 <p>
   Artist information
 </p>
+
+
 <ul>
   <li>Songkick URL: {{ artist_site }}</li>
   <li>{{ tour }}</li>
-  <li>Locations: {{ venue }}</li>
 </ul>
+
+
+<h3>Locations</h3>
+{% for location, times in venue %}
+<ul>
+  <li><u> {{ times }} </u></li>
+  <ul>
+    <li>{{ location }}</li>
+    
+  </ul>
+</ul>
+
+
+{% endfor %}
 
 {% endblock content%}

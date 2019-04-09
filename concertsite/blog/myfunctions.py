@@ -7,18 +7,18 @@ import re
 
 def month_to_num(month):
     return {
-        'January': 1,
-        'February': 2,
-        'March': 3,
-        'April': 4,
-        'May': 5,
-        'June': 6,
-        'July': 7,
-        'August': 8,
-        'September': 9,
-        'October': 10,
-        'November': 11,
-        'December': 12
+        'January': '1',
+        'February': '2',
+        'March': '3',
+        'April': '4',
+        'May': '5',
+        'June': '6',
+        'July': '7',
+        'August': '8',
+        'September': '9',
+        'October': '10',
+        'November': '11',
+        'December': '12'
     }[month]
 
 def get_url(artist):
@@ -116,6 +116,7 @@ def get_dates(on_tour, dates, artist_site_soup):
                 return 'No concerts near you.'
         else:
             venue = []
+            times = []
             for date in dates:
                 # Get the city and state and check the tempature and the current condition
                 location = date.split(', ')
@@ -126,11 +127,16 @@ def get_dates(on_tour, dates, artist_site_soup):
                 year = date_info[3]
                 time = [year, month, day]
                 print('Venue: ' , ' '.join(date_info[4:len(date_info)]))
-                venue.append(' '.join(date_info[4:len(date_info)]))
+                loc = ' '.join(date_info[4:len(date_info)])
+                #venue.append(' '.join(date_info[4:len(date_info)]))
                 print(date_info)
+                time = '-'.join(time)
                 print(time)
                 city = location[len(location)-2]
                 state = location[len(location)-1]
                 place = city + ', ' + state + ', USA'
-                print(place)
-    return venue
+                loc = 'Venue: ' + loc + ' in ' + place
+                #print(loc)
+                venue.append(loc)
+                times.append(time)
+    return venue, times
