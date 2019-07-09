@@ -30,8 +30,11 @@ def index_page(request):
         dates = []
         times = []
         dates, times = get_dates(tour, dates, text)
-        venue_times = zip(dates, times)
-        context['venue'] = venue_times
-        #context['times'] = times
+        if dates == None and times == None:
+            context['venue'] = None
+        else:
+            venue_times = zip(dates, times)
+            context['venue'] = venue_times
+            #context['times'] = times
        
     return render(request, 'blog/index.html', context)

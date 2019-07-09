@@ -112,11 +112,13 @@ def get_tour_dates(artist_site_soup, new_dates):
 def get_dates(on_tour, dates, artist_site_soup):
     if('yes' in on_tour):
         dates = get_tour_dates(artist_site_soup, dates)
+        venue = []
+        times = []
         if(len(dates) == 0):
-                return 'No concerts near you.'
+            venue = None
+            times = None
+            return venue, times
         else:
-            venue = []
-            times = []
             for date in dates:
                 # Get the city and state and check the tempature and the current condition
                 location = date.split(', ')

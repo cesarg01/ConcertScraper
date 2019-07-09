@@ -64,16 +64,19 @@
 
 
 <h3>Locations</h3>
-{% for location, times in venue %}
-<ul>
-  <li><u> {{ times }} </u></li>
+{% if venue == None %}
+  {{'Artist not near your location.'}}
+{% else %}{% if venue != None %}
+  {% for location, times in venue %}
   <ul>
-    <li>{{ location }}</li>
+    <li><u> {{ times }} </u></li>
+    <ul>
+      <li>{{ location }}</li>
     
+    </ul>
   </ul>
-</ul>
-
 
 {% endfor %}
-
+{% endif %}
+{% endif %}
 {% endblock content%}
